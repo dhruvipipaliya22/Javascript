@@ -28,8 +28,8 @@
   object-fit: cover;
   border-radius: 10px;
 }
-.follow-btn{
-  background-color: #007bff;
+#follow-btn{
+  background-color: #313335;
   color: #fff;
   padding: 10px 20px;
   border-radius: 10px;
@@ -45,8 +45,8 @@
   align-items: center;
   justify-content: space-between;
 }
-.like-btn, .share-btn, .comment-btn, .post-comment-btn{
-  background-color: #007bff;
+#like-btn, #share-btn, #comment-btn, #post-comment-btn{
+  background-color: #313335;
   color: #fff;
   padding: 10px 20px;
   border-radius: 10px;
@@ -54,19 +54,19 @@
   cursor: pointer;
   border: none;
 }
-.likes-count, .comments-count{
+#likes-count, #comments-count{
   font-size: 16px;
   color: #666;
 }
-.comments-section{
+#comments-section{
   margin-top: 20px;
 } 
-.comments-section input{
+#comments-section input{
   width: 100%;
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 10px;
 }
-.post-comment-btn{
+#post-comment-btn{
   margin-top: 20px;
 }

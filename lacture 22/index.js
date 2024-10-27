@@ -1,62 +1,90 @@
-const followbtn = document.getElementsByClassName("follow-btn")[0];
-const likebtn = document.getElementsByClassName("like-btn")[0];
-const sharebtn = document.getElementsByClassName("share-btn")[0];
-const commentbtn = document.getElementsByClassName("comment-btn")[0];
-const postcommentbtn = document.getElementsByClassName("post-comment-btn")[0];
-const likeCount = document.getElementsByClassName("likes-count")[0];
-const sharesCount = document.getElementsByClassName("shares-count")[0];
-const commentsCount = document.getElementsByClassName("comments-count")[0];
-const commentsSection = document.getElementsByClassName("comments-section")[0];
-
-const likesKey="like";
-const commentsKey="comments";
-const sharesKey="shares";
-
-let likes= localStorage.getItem(likesKey)||sessionStorage.getItem(likesKey)||0;
-let comments=localStorage.getItem(commentsKey)||sessionStorage.getItem(commentsKey)||0;
-let shares=localStorage.getItem(sharesKey)||sessionStorage.getItem(sharesKey)||0;
-
-likeCount.textContent=`${likes} likes`;
-sharesCount.textContent=`${shares} shares`;
-commentsCount.textContent=`${comments} comments`;
-
-followbtn.addEventListener('click',()=>{
-    followbtn.textContent=followbtn.textContent=="Follow"?"Unfollow":"Follow";
-});
-
-likebtn.addEventListener('click',()=>{
+let elements = {
+    followBtn: document.getElementById("follow-btn"),
+    likeBtn: document.getElementById("like-btn"),
+    shareBtn: document.getElementById("share-btn"),
+    commentBtn: document.getElementById("comment-btn"),
+    postCommentBtn: document.getElementById("post-comment-btn"),
+    likeCount: document.getElementById("likes-count"),
+    sharesCount: document.getElementById("shares-count"),
+    commentsCount: document.getElementById("comments-count"),
+    commentsSection: document.getElementById("comments-section")
+  };
+  
+  let likesKey = "like";
+  let commentsKey = "comments";
+  let sharesKey = "shares";
+  let followKey = "follow";
+  
+  let likes = getStorageValue(likesKey) || 0;
+  let comments = getStorageValue(commentsKey) || 0;
+  let shares = getStorageValue(sharesKey) || 0;
+  let isFollowed = getStorageValue(followKey) || "false";
+  
+  updateCounts();
+  
+  if (isFollowed === "true") {
+    elements.followBtn.innerHTML = "Unfollow";
+  } else {
+    elements.followBtn.innerHTML = "Follow";
+  }
+  
+  elements.followBtn.addEventListener('click', toggleFollow);
+  elements.likeBtn.addEventListener('click', handleLike);
+  elements.shareBtn.addEventListener('click', handleShare);
+  elements.commentBtn.addEventListener('click', handleComment);
+  elements.postCommentBtn.addEventListener('click', handlePostComment);
+  
+  function updateCounts() {
+    elements.likeCount.innerHTML = `${likes} likes`;
+    elements.sharesCount.innerHTML = `${shares} shares`;
+    elements.commentsCount.innerHTML = `${comments} comments`;
+  }
+  
+  function toggleFollow() {
+    isFollowed = isFollowed === "true" ? "false" : "true";
+    setStorageValue(followKey, isFollowed);
+    elements.followBtn.innerHTML = isFollowed === "true" ? "Unfollow" : "Follow";
+  }
+  
+  function handleLike() {
     likes++;
-    localStorage.setItem(likesKey,likes);
-    sessionStorage.setItem(likesKey,likes);
-    likeCount.textContent=`${likes} likes`;
-    likebtn.style.backgroundcolor='#0069d9';
+    setStorageValue(likesKey, likes);
+    updateCounts();
     setTimeout(() => {
-        likebtn.style.backgroundcolor='#0007bff';
+      elements.likeBtn.style.backgroundColor = '#313335';
     }, 500);
-});
-
-sharebtn.addEventListener('click',()=>{
+  }
+  
+  function handleShare() {
     shares++;
-    localStorage.setItem(sharesKey,shares);
-    sessionStorage.setItem(sharesKey,shares);
-    sharesCount.textContent=`${shares} shares`;
-    alert('shared!');
-});
-
-commentbtn.addEventListener('click',()=>{
-    commentsSection.style.display=commentsSection.style.display=='none'?'block':'none';
-    const input=commentsSection.getElementsByTagName('input')[0];
-    const postbtn=commentsSection.getElementsByTagName('button')[0];
-    input.style.display='block';
-    postbtn.style.display='block';
-});
-
-postcommentbtn.addEventListener('click',()=>{
-    const comment=commentsSection.getElementsByTagName('input')[0].value;
+    setStorageValue(sharesKey, shares);
+    updateCounts();
+    alert('Shared!');
+  }
+  
+  function handleComment() {
+    elements.commentsSection.style.display = elements.commentsSection.style.display == 'none' ? 'block' : 'none';
+    const input = elements.commentsSection.querySelector('input');
+    const postBtn = elements.commentsSection.querySelector('button');
+    input.style.display = 'block';
+    postBtn.style.display = 'block';
+  }
+  
+  function handlePostComment() {
+    const comment = elements.commentsSection.querySelector('input').value;
     comments++;
-    localStorage.setItem(commentsKey,comments);
-    sessionStorage.setItem(commentsKey,comments);
-    commentsCount.textContent=`${comments} comments`;
-    commentsSection.getElementsByTagName('input')[0].value='';
-    alert(`comment posted:${comment}`);
-});
+    setStorageValue(commentsKey, comments);
+    updateCounts();
+    elements.commentsSection.querySelector('input').value = '';
+    alert(`Comment posted: ${comment}`);
+  }
+  
+  function getStorageValue(key) {
+    return localStorage.getItem(key) || sessionStorage.getItem(key);
+  }
+  
+  function setStorageValue(key, value) {
+    localStorage.setItem(key, value);
+    sessionStorage.setItem(key, value);
+  }
+  
